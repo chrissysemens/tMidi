@@ -108,6 +108,20 @@ Track 1: pad
 
 ---
 
+## How to start
+
+There is an example tmidi file located examples/example.tmidi
+This will show the structure and sample notation.
+
+Compiling this file will generate a midi file, a compiled version lives in midi/example.mid
+
+Moving the midi file into Ableton, adding instruments and exporting will complete the track: Completed output example is available in final/example.wav
+
+(Don't expect much but inspecting the tmidi file and running the build command should get you started)
+
+I'll provide a cleaner example soon.
+
+
 ## Typical Workflow
 
 Write:
