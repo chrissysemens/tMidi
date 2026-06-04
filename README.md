@@ -110,16 +110,16 @@ Track 1: pad
 
 ## How to start
 
-There is an example tmidi file located examples/example.tmidi
-This will show the structure and sample notation.
+There is an example tmidi file located examples/example.tmidi. This will show the structure of a song and sample notation.
 
 Compiling this file will generate a midi file, a compiled version lives in midi/example.mid
 
-Moving the midi file into Ableton, adding instruments and exporting will complete the track: Completed output example is available in final/example.wav
+Dragging the midi file into Ableton (or your DAW of choice), adding instruments and exporting will complete the track.
+Completed output example is available in final/example.wav
 
-(Don't expect much but inspecting the tmidi file and running the build command should get you started)
+(Don't expect much from the example (I've been focussing on the code) but inspecting the tmidi file and running the build command should get you started
 
-I'll provide a cleaner example soon.
+I'll provide a cooler, better sounding example soon.
 
 
 ## Typical Workflow
@@ -267,7 +267,7 @@ Cadd9
 
 # Explicit Voicings
 
-Exact notes:
+You dont have to use chord names, you can build your own chords with exact notes:
 
 ```text
 | [C4 E4 G4] |
@@ -349,6 +349,7 @@ track: kick step:1/16 note:C1
 ---
 
 # Velocity Shorthand
+Drum tracks have a velocity short hand X | x | !
 
 Ghost note:
 
