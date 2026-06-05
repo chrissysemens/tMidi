@@ -68,11 +68,28 @@ A few lines of text become a complete MIDI arrangement.
 
 # Installation
 
+Pull the repo and install dependencies:
+
 ```bash
 npm install
 ```
 
 ---
+
+# Getting started
+
+The easiest way to get started is probably casting your eye over the example file provided, learn the notation, run the commands below to convert it to midi.
+
+
+Full example [here](https://github.com/chrissysemens/tMidi/blob/main/examples/example.tmidi)
+
+One you have a midi file, drag it into the daw of your choice. 
+Add instruments to each track. Have fun.
+
+You can listen to the track composed with the example midi [here](https://github.com/chrissysemens/tMidi/blob/main/final/example.wav)
+
+Don't judge the music it's just a demo 😀
+
 
 # Command Guide
 
@@ -107,20 +124,6 @@ Track 1: pad
 ```
 
 ---
-
-## How to start
-
-There is an example tmidi file located examples/example.tmidi
-This will show the structure and sample notation.
-
-Compiling this file will generate a midi file, a compiled version lives in midi/example.mid
-
-Moving the midi file into Ableton, adding instruments and exporting will complete the track: Completed output example is available in final/example.wav
-
-(Don't expect much but inspecting the tmidi file and running the build command should get you started)
-
-I'll provide a cleaner example soon.
-
 
 ## Typical Workflow
 

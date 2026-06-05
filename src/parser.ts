@@ -187,7 +187,17 @@ function parseCell(
 
     const velocityMatch = cell.match(/:(\d+)$/);
     const velocity = velocityMatch ? Number(velocityMatch[1]) : 90;
-    const body = cell.replace(/:\d+$/, "");
+    let body = cell.replace(/:\d+$/, "");
+
+    const spaceSlashMatch = body.match(/^(\S+)\s+([A-G](?:#|b)?)$/);
+    if (spaceSlashMatch) {
+        const [, chordSymbol, bassNote] = spaceSlashMatch;
+        const slashBody = `${chordSymbol}/${bassNote}`;
+
+        if (expandChordSymbol(slashBody, previousChordVoicing)) {
+            body = slashBody;
+        }
+    }
 
     if (
         (body.startsWith("(") && body.endsWith(")")) ||
