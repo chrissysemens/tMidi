@@ -3,14 +3,14 @@ import fs from "node:fs";
 
 const { Midi } = ToneMidi;
 
-function displayPitch(name: string): string {
+const displayPitch = (name: string): string => {
   return name.replace(
     /(-?\d+)$/,
     (_, octave) => String(Number(octave) - 1)
   );
 }
 
-export function inspectMidi(path: string) {
+export const inspectMidi = (path: string) => {
   const data = fs.readFileSync(path);
   const midi = new Midi(data);
 

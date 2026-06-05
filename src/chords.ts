@@ -70,10 +70,10 @@ export const CHORD_QUALITIES: Record<string, number[]> = {
   min9: [0, 3, 7, 10, 14],
 };
 
-function chooseClosestVoicing(
+const chooseClosestVoicing = (
   basicVoicing: number[],
   previousVoicing: number[]
-): number[] {
+): number[] => {
   const candidates = generateInversionCandidates(basicVoicing);
 
   let best = candidates[0];
@@ -91,7 +91,7 @@ function chooseClosestVoicing(
   return best;
 }
 
-function generateInversionCandidates(basicVoicing: number[]): number[][] {
+const generateInversionCandidates = (basicVoicing: number[]): number[][] => {
   const candidates: number[][] = [];
 
   for (let octaveShift = -1; octaveShift <= 1; octaveShift++) {
@@ -111,10 +111,10 @@ function generateInversionCandidates(basicVoicing: number[]): number[][] {
   return candidates;
 }
 
-function voiceLeadingScore(
+const voiceLeadingScore = (
   candidate: number[],
   previous: number[]
-): number {
+): number => {
   const len = Math.min(candidate.length, previous.length);
 
   let score = 0;
@@ -131,11 +131,11 @@ function voiceLeadingScore(
   return score;
 }
 
-function average(nums: number[]): number {
+const average = (nums: number[]): number => {
   return nums.reduce((sum, n) => sum + n, 0) / nums.length;
 }
 
-function noteNameToMidi(note: string): number {
+const noteNameToMidi = (note: string): number => {
   const match = note.match(/^([A-G](?:#|b)?)(-?\d+)$/);
   if (!match) throw new Error(`Invalid note name: ${note}`);
 
@@ -149,17 +149,17 @@ function noteNameToMidi(note: string): number {
   return 12 * (Number(octaveText) + 1) + semitone;
 }
 
-function midiToNoteName(midi: number): string {
+const midiToNoteName = (midi: number): string => {
   const semitone = midi % 12;
   const octave = Math.floor(midi / 12) - 1;
 
   return `${SEMITONE_TO_NOTE[semitone]}${octave}`;
 }
 
-export function expandChordSymbol(
+export const expandChordSymbol = (
   symbol: string,
   previousVoicing?: string[]
-): string[] | null {
+): string[] | null => {
   const match = symbol.match(
     /^([A-G](?:#|b)?)(.*?)(?:\/([A-G](?:#|b)?))?(?:@(\d+))?$/
   );
@@ -213,10 +213,10 @@ export function expandChordSymbol(
   return finalVoicing.map(midiToNoteName);
 }
 
-function bassMidiBelowVoicing(
+const bassMidiBelowVoicing = (
   bassNote: string,
   voicing: number[]
-): number {
+): number => {
   const bassSemitone = NOTE_TO_SEMITONE[bassNote];
 
   if (bassSemitone === undefined) {

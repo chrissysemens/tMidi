@@ -1,7 +1,7 @@
 import { expandChordSymbol, NOTE_TO_SEMITONE } from "./chords.js";
 import { Song, NoteEvent } from "./types.js";
 
-export function parseTmidi(source: string): Song {
+export const parseTmidi = (source: string): Song => {
     const events: NoteEvent[] = [];
     const sections = new Map<string, NoteEvent[]>();
     const sectionOrder: string[] = [];
@@ -151,14 +151,14 @@ export function parseTmidi(source: string): Song {
     return { tempo, grid, time, events };
 }
 
-function parseCell(
+const parseCell = (
     cell: string,
     track: string,
     step: number,
     durationSteps: number,
     previousChordVoicing?: string[],
     defaultNote?: string
-): { events: NoteEvent[]; chordVoicing?: string[] } {
+): { events: NoteEvent[]; chordVoicing?: string[] } => {
     if (cell === "-") return { events: [] };
 
     if (cell === "x" || cell === "X" || cell === "!") {
@@ -259,7 +259,7 @@ function parseCell(
     };
 }
 
-function resolutionToGridSteps(resolution: string, grid: string): number {
+const resolutionToGridSteps = (resolution: string, grid: string): number => {
     const res = fractionToNumber(resolution);
     const gridValue = fractionToNumber(grid);
 
@@ -274,7 +274,7 @@ function resolutionToGridSteps(resolution: string, grid: string): number {
     return steps;
 }
 
-function fractionToNumber(value: string): number {
+const fractionToNumber = (value: string): number => {
     const [top, bottom] = value.split("/").map(Number);
 
     if (!top || !bottom) {
@@ -284,10 +284,10 @@ function fractionToNumber(value: string): number {
     return top / bottom;
 }
 
-function arrangeSections(
+const arrangeSections = (
     sections: Map<string, NoteEvent[]>,
     order: string[]
-): NoteEvent[] {
+): NoteEvent[] => {
     const arrangedEvents: NoteEvent[] = [];
     let offset = 0;
 

@@ -1,6 +1,6 @@
 import { NOTE_TO_SEMITONE } from "./chords.js";
 
-export function normalizeChordQuality(quality: string): string {
+export const normalizeChordQuality = (quality: string): string => {
   const aliases: Record<string, string> = {
     
     "": "",
@@ -27,10 +27,10 @@ export function normalizeChordQuality(quality: string): string {
   return aliases[quality] ?? quality;
 }
 
-function chooseClosestVoicing(
+const chooseClosestVoicing = (
   basicVoicing: number[],
   previousVoicing: number[]
-): number[] {
+): number[] => {
   const candidates = generateInversionCandidates(basicVoicing);
 
   let best = candidates[0];
@@ -48,7 +48,7 @@ function chooseClosestVoicing(
   return best;
 }
 
-function generateInversionCandidates(basicVoicing: number[]): number[][] {
+const generateInversionCandidates = (basicVoicing: number[]): number[][] => {
   const candidates: number[][] = [];
 
   for (let octaveShift = -1; octaveShift <= 1; octaveShift++) {
@@ -68,10 +68,10 @@ function generateInversionCandidates(basicVoicing: number[]): number[][] {
   return candidates;
 }
 
-function voiceLeadingScore(
+const voiceLeadingScore = (
   candidate: number[],
   previous: number[]
-): number {
+): number => {
   const len = Math.min(candidate.length, previous.length);
 
   let score = 0;
@@ -87,11 +87,11 @@ function voiceLeadingScore(
   return score;
 }
 
-function average(nums: number[]): number {
+const average = (nums: number[]): number => {
   return nums.reduce((sum, n) => sum + n, 0) / nums.length;
 }
 
-function noteNameToMidi(note: string): number {
+const noteNameToMidi = (note: string): number => {
   const match = note.match(/^([A-G](?:#|b)?)(-?\d+)$/);
   if (!match) throw new Error(`Invalid note name: ${note}`);
 

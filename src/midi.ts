@@ -2,14 +2,14 @@ import ToneMidi from "@tonejs/midi";
 import { Song } from "./types.js";
 import fs from "node:fs";
 
-function shiftPitchOctave(pitch: string, amount: number): string {
+const shiftPitchOctave = (pitch: string, amount: number): string => {
     return pitch.replace(
         /(-?\d+)$/,
         (_, octave) => String(Number(octave) + amount)
     );
 }
 
-export function writeMidi(song: Song, outPath: string) {
+export const writeMidi = (song: Song, outPath: string) => {
     const { Midi } = ToneMidi;
     const midi = new Midi();
     midi.header.setTempo(song.tempo);
