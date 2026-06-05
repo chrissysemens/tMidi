@@ -270,7 +270,7 @@ Cadd9
 
 # Explicit Voicings
 
-Exact notes:
+You dont have to use chord names, you can build your own chords with exact notes:
 
 ```text
 | [C4 E4 G4] |
@@ -352,6 +352,7 @@ track: kick step:1/16 note:C1
 ---
 
 # Velocity Shorthand
+Drum tracks have a velocity short hand X | x | !
 
 Ghost note:
 
