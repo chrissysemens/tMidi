@@ -1,20 +1,19 @@
 import ToneMidi from "@tonejs/midi";
 import fs from "node:fs";
+import { TMIDI_REGEX } from "./consts.js";
 
 const { Midi } = ToneMidi;
 
 const displayPitch = (name: string): string => {
-  return name.replace(
-    /(-?\d+)$/,
-    (_, octave) => String(Number(octave) - 1)
-  );
+  return name.replace(TMIDI_REGEX.noteWithAnyOctave, (_, pitch, octave) => `${pitch}${String(Number(octave) - 1)}`);
 }
 
-export const inspectMidi = (path: string) => {
-  const data = fs.readFileSync(path);
+export const inspectMidi = async (path: string): Promise<void> => {
+  const data = await fs.promises.readFile(path);
   const midi = new Midi(data);
 
-  console.log(`Tempo: ${midi.header.tempos?.[0]?.bpm ?? midi.header.tempos?.[0]?.bpm ?? "unknown"}`);
+  const tempo = midi.header.tempos?.[0]?.bpm ?? "unknown";
+  console.log(`Tempo: ${tempo}`);
   console.log(`Tracks: ${midi.tracks.length}`);
   console.log("");
 

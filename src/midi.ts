@@ -1,19 +1,19 @@
 import ToneMidi from "@tonejs/midi";
 import { Song } from "./types.js";
 import fs from "node:fs";
+import { TMIDI_REGEX } from "./consts.js";
 
 const shiftPitchOctave = (pitch: string, amount: number): string => {
-    return pitch.replace(
-        /(-?\d+)$/,
-        (_, octave) => String(Number(octave) + amount)
-    );
+    return pitch.replace(TMIDI_REGEX.noteWithAnyOctave, (_, base, octave) => `${base}${String(Number(octave) + amount)}`);
 }
 
-export const writeMidi = (song: Song, outPath: string) => {
+export const writeMidi = async (song: Song, outPath: string): Promise<void> => {
     const { Midi } = ToneMidi;
     const midi = new Midi();
-    midi.header.setTempo(song.tempo);
-    midi.header.setTempo(song.tempo);
+
+    if (typeof song.tempo === 'number' && Number.isFinite(song.tempo) && song.tempo > 0) {
+      midi.header.setTempo(song.tempo);
+    }
 
     const ticksPerQuarter = midi.header.ppq;
     const ticksPerStep = ticksPerQuarter / 4;
@@ -27,7 +27,7 @@ export const writeMidi = (song: Song, outPath: string) => {
             tracks.set(event.track, track);
         }
 
-        if (!/^[A-G](?:#|b)?-?\d+$/.test(event.pitch)) {
+        if (!TMIDI_REGEX.noteWithAnyOctave.test(event.pitch)) {
             throw new Error(
                 `Invalid pitch "${event.pitch}" in track "${event.track}" at step ${event.startStep}`
             );
@@ -40,5 +40,5 @@ export const writeMidi = (song: Song, outPath: string) => {
         });
     }
 
-    fs.writeFileSync(outPath, Buffer.from(midi.toArray()));
+    await fs.promises.writeFile(outPath, Buffer.from(midi.toArray()));
 }

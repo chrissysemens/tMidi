@@ -1,4 +1,5 @@
 import { normalizeChordQuality } from "./utils.js";
+import { TMIDI_REGEX } from "./consts.js";
 
 export const NOTE_TO_SEMITONE: Record<string, number> = {
   C: 0,
@@ -72,15 +73,19 @@ export const CHORD_QUALITIES: Record<string, number[]> = {
 
 const chooseClosestVoicing = (
   basicVoicing: number[],
-  previousVoicing: number[]
+  previousVoicing: number[],
+  previousCenter?: number
 ): number[] => {
+  if (basicVoicing.length === 0) return [];
+  if (!previousVoicing || previousVoicing.length === 0) return basicVoicing;
+
   const candidates = generateInversionCandidates(basicVoicing);
 
   let best = candidates[0];
   let bestScore = Infinity;
 
   for (const candidate of candidates) {
-    const score = voiceLeadingScore(candidate, previousVoicing);
+    const score = voiceLeadingScore(candidate, previousVoicing, previousCenter);
 
     if (score < bestScore) {
       best = candidate;
@@ -113,7 +118,8 @@ const generateInversionCandidates = (basicVoicing: number[]): number[][] => {
 
 const voiceLeadingScore = (
   candidate: number[],
-  previous: number[]
+  previous: number[],
+  previousCenter?: number
 ): number => {
   const len = Math.min(candidate.length, previous.length);
 
@@ -125,18 +131,19 @@ const voiceLeadingScore = (
 
   // Penalize huge register jumps.
   const candidateCenter = average(candidate);
-  const previousCenter = average(previous);
-  score += Math.abs(candidateCenter - previousCenter) * 0.5;
+  const prevCenter = previousCenter ?? average(previous);
+  score += Math.abs(candidateCenter - prevCenter) * 0.5;
 
   return score;
 }
 
 const average = (nums: number[]): number => {
+  if (nums.length === 0) return 0;
   return nums.reduce((sum, n) => sum + n, 0) / nums.length;
 }
 
-const noteNameToMidi = (note: string): number => {
-  const match = note.match(/^([A-G](?:#|b)?)(-?\d+)$/);
+export const noteNameToMidi = (note: string): number => {
+  const match = note.match(TMIDI_REGEX.noteWithAnyOctave);
   if (!match) throw new Error(`Invalid note name: ${note}`);
 
   const [, pitch, octaveText] = match;
@@ -149,20 +156,22 @@ const noteNameToMidi = (note: string): number => {
   return 12 * (Number(octaveText) + 1) + semitone;
 }
 
-const midiToNoteName = (midi: number): string => {
+export const midiToNoteName = (midi: number): string => {
   const semitone = midi % 12;
   const octave = Math.floor(midi / 12) - 1;
 
   return `${SEMITONE_TO_NOTE[semitone]}${octave}`;
 }
 
+/**
+ * Expand a chord symbol (e.g. Cmaj7/G@4) into absolute note names.
+ * Returns `null` if the symbol is invalid.
+ */
 export const expandChordSymbol = (
   symbol: string,
   previousVoicing?: string[]
 ): string[] | null => {
-  const match = symbol.match(
-    /^([A-G](?:#|b)?)(.*?)(?:\/([A-G](?:#|b)?))?(?:@(\d+))?$/
-  );
+  const match = symbol.match(TMIDI_REGEX.chordSymbol);
 
   if (!match) return null;
 
@@ -192,7 +201,9 @@ export const expandChordSymbol = (
     finalVoicing = basicVoicing;
   } else {
     const previousMidi = previousVoicing.map(noteNameToMidi);
-    finalVoicing = chooseClosestVoicing(basicVoicing, previousMidi);
+    // compute previous center once for efficiency
+    const previousCenter = average(previousMidi);
+    finalVoicing = chooseClosestVoicing(basicVoicing, previousMidi, previousCenter);
   }
 
   if (bassNote) {

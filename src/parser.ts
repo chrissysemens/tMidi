@@ -1,4 +1,6 @@
 import { expandChordSymbol, NOTE_TO_SEMITONE } from "./chords.js";
+import { TMIDI_REGEX } from "./consts.js";
+import { stripRepeat, stripVelocity } from "./utils.js";
 import { Song, NoteEvent } from "./types.js";
 
 export const parseTmidi = (source: string): Song => {
@@ -19,10 +21,12 @@ export const parseTmidi = (source: string): Song => {
 
     let previousChordVoicing: string[] | undefined;
 
-    for (const rawLine of source.split("\n")) {
+    for (const [lineIndex, rawLine] of source.split("\n").entries()) {
+        const lineNumber = lineIndex + 1;
         const line = rawLine.trim();
         if (!line || line.startsWith("#")) continue;
 
+        try {
         if (line.startsWith("tempo:")) {
             tempo = Number(line.split(":")[1].trim());
             continue;
@@ -86,11 +90,7 @@ export const parseTmidi = (source: string): Song => {
         }
 
         if (line.startsWith("|")) {
-            const repeatMatch = line.match(/\s+\*(\d+)\s*$/);
-            const repeatCount = repeatMatch ? Number(repeatMatch[1]) : 1;
-            const barLine = repeatMatch
-                ? line.replace(/\s+\*\d+\s*$/, "").trim()
-                : line;
+            const { line: barLine, repeatCount } = stripRepeat(line);
 
             const cells = barLine
                 .split("|")
@@ -127,6 +127,9 @@ export const parseTmidi = (source: string): Song => {
             }
 
             continue;
+        }
+        } catch (err: any) {
+            throw new Error(`Parse error at line ${lineNumber}: ${err?.message ?? String(err)}`);
         }
     }
 
@@ -185,11 +188,10 @@ const parseCell = (
         };
     }
 
-    const velocityMatch = cell.match(/:(\d+)$/);
-    const velocity = velocityMatch ? Number(velocityMatch[1]) : 90;
-    let body = cell.replace(/:\d+$/, "");
+    const { body: initialBody, velocity } = stripVelocity(cell);
+    let body = initialBody;
 
-    const spaceSlashMatch = body.match(/^(\S+)\s+([A-G](?:#|b)?)$/);
+    const spaceSlashMatch = body.match(TMIDI_REGEX.spaceSlashChord);
     if (spaceSlashMatch) {
         const [, chordSymbol, bassNote] = spaceSlashMatch;
         const slashBody = `${chordSymbol}/${bassNote}`;
@@ -217,7 +219,7 @@ const parseCell = (
         };
     }
 
-    const isNoteName = /^[A-G](?:#|b)?(?:-1|[0-6])$/.test(body);
+    const isNoteName = TMIDI_REGEX.noteName.test(body);
 
     if (isNoteName) {
         return {
