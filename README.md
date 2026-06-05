@@ -86,7 +86,7 @@ Full example [here](https://github.com/chrissysemens/tMidi/blob/main/examples/ex
 One you have a midi file, drag it into the daw of your choice. 
 Add instruments to each track. Have fun.
 
-You can listen to the track composed with the example midi [here](https://github.com/chrissysemens/tMidi/blob/main/final/example.wav)
+You can listen to the track composed with the example midi [here](https://raw.githubusercontent.com/chrissysemens/repo/main/final/example.wav)
 
 Don't judge the music it's just a demo 😀
 
