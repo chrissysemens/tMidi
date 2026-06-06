@@ -125,6 +125,16 @@ Track 1: pad
 
 ---
 
+## Visualise a TMIDI file
+
+```bash
+npm run dev -- visualise examples/example.tmidi
+```
+
+This prints a console timeline of each track with colors and step markers.
+
+---
+
 ## Typical Workflow
 
 Write:
