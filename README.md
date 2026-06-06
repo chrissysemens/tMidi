@@ -133,6 +133,8 @@ npm run dev -- visualise examples/example.tmidi
 
 This prints a console timeline of each track with colors and step markers.
 
+![TMIDI visualiser screenshot](assets/visualise.png)
+
 ---
 
 ## Typical Workflow
