@@ -5,16 +5,16 @@ import { Command } from "commander";
 import { parseTmidi } from "./parser.js";
 import { writeMidi } from "./midi.js";
 import { inspectMidi } from "./inspect.js";
+import { visualizeSong } from "./visualise.js";
 
 const program = new Command();
 
-// load package version for CLI
 let pkgVersion = "0.0.0";
 try {
     const pkgRaw = fs.readFileSync(new URL("../package.json", import.meta.url), "utf8");
     const pkg = JSON.parse(pkgRaw);
     pkgVersion = pkg.version ?? pkgVersion;
-} catch {}
+} catch { }
 
 program.name("text-to-midi").version(pkgVersion).description("Text-to-MIDI utilities");
 
@@ -74,4 +74,13 @@ program
         }
     });
 
+program
+    .command("visualise")
+    .argument("<input>")
+    .action((input) => {
+        const source = fs.readFileSync(input, "utf8");
+        const song = parseTmidi(source);
+
+        visualizeSong(song);
+    });
 program.parse();

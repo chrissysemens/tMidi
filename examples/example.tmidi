@@ -4,15 +4,15 @@ time: 4/4
 
 section: intro_a
 
-track: rhodes step:1/1
+track: rhodes step:1/1 color:magenta
 | [D3 F#3 A3 C#4] | [C#3 E3 A3 C#4] | [B2 D3 F#3 A3] | [G2 B2 D3 F#3] |
 | [D3 F#3 A3 C#4] | [C#3 E3 A3 C#4] | [E3 G3 B3 D4] | [G2 B2 D3 F#3] |
 
-track: guitar_swells step:1/1
+track: guitar_swells step:1/1 color:yellow
 | A4 | A4 | A4 | G4 |
 | F#4 | E4 | G4 | F#4 |
 
-track: strings_high step:1/1
+track: strings_high step:1/1 color:pink
 | [A4 F#4] | [A4 F#4 E4] | [A4 F#4 D4] | [G4 D4 B3] |
 | [A4 F#4] | [A4 E4] | [B4 G4] | [F#4 D4] |
 
@@ -22,7 +22,7 @@ track: rhodes step:1/1
 | [D3 F#3 A3 C#4] | [C#3 E3 A3 C#4] | [B2 D3 F#3 A3] | [G2 B2 D3 F#3] |
 | [D3 F#3 A3 C#4] | [C#3 E3 A3 C#4] | [E3 G3 B3 D4] | [G2 B2 D3 F#3] |
 
-track: felt_piano step:1/8
+track: felt_piano step:1/8 color:teale
 | F#4 | - | A4 | - |
 | B4 | - | A4 | - |
 | E4 | - | F#4 | - |
@@ -33,7 +33,7 @@ track: felt_piano step:1/8
 | G4 | - | A4 | - |
 | F#4 | - | E4 | - |
 
-track: bass step:1/4
+track: bass step:1/4 color:brown
 | D2 | F#2 | A2 | F#2 |
 | C#2 | E2 | C#2 | B1 |
 | B1 | D2 | F#2 | D2 |
@@ -61,7 +61,7 @@ track: felt_piano step:1/8
 | G4 | - | A4 | - |
 | F#4 | - | E4 | - |
 
-track: melody step:1/8
+track: melody step:1/8 color:green
 | F#4 | - | A4 | - |
 | B4 | - | A4 | - |
 | E4 | - | F#4 | - |
@@ -83,13 +83,13 @@ track: bass step:1/4
 | E2 | B2 | G2 | B2 |
 | G1 | D2 | B1 | D2 |
 
-track: kick step:1/16 note:C1
+track: kick step:1/16 note:C1 color:white
 | X | - | - | - | - | - | X | - | - | - | - | - | - | - | X | - | *8
 
-track: snare step:1/16 note:D1
+track: snare step:1/16 note:D1 color:grey
 | - | - | - | - | X | - | - | - | - | - | - | - | X | - | - | - | *8
 
-track: hat_closed step:1/16 note:F#1
+track: hat_closed step:1/16 note:F#1 color:lightgrey
 | X | - | x | - | X | - | x | - | X | - | x | - | X | - | x | - | *8
 
 section: verse_b
@@ -131,7 +131,7 @@ track: bass step:1/4
 | E2 | G2 | B2 | A2 |
 | G1 | B1 | D2 | F#2 |
 
-track: strings_low step:1/1
+track: strings_low step:1/1 color: teale
 | D3 | E3 | D3 | B2 |
 | D3 | E3 | G3 | D3 |
 

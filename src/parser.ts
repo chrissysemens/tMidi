@@ -7,6 +7,7 @@ export const parseTmidi = (source: string): Song => {
     const events: NoteEvent[] = [];
     const sections = new Map<string, NoteEvent[]>();
     const sectionOrder: string[] = [];
+    const trackMeta: Record<string, { color?: string }> = {};
 
     let tempo = 120;
     let grid = "1/16";
@@ -27,107 +28,114 @@ export const parseTmidi = (source: string): Song => {
         if (!line || line.startsWith("#")) continue;
 
         try {
-        if (line.startsWith("tempo:")) {
-            tempo = Number(line.split(":")[1].trim());
-            continue;
-        }
-
-        if (line.startsWith("grid:")) {
-            grid = line.split(":")[1].trim();
-            continue;
-        }
-
-        if (line.startsWith("time:")) {
-            time = line.split(":")[1].trim();
-            continue;
-        }
-
-        if (line.startsWith("section:")) {
-            currentSection = line.split(":")[1].trim();
-
-            if (!sections.has(currentSection)) {
-                sections.set(currentSection, []);
-                sectionOrder.push(currentSection);
+            if (line.startsWith("tempo:")) {
+                tempo = Number(line.split(":")[1].trim());
+                continue;
             }
 
-            step = 0;
-            previousChordVoicing = undefined;
-            continue;
-        }
-
-        if (line.startsWith("track:")) {
-            const parts = line.split(/\s+/);
-
-            currentTrack = parts[1];
-            currentTrackStep = grid;
-            currentTrackNote = undefined;
-
-            step = 0;
-            previousChordVoicing = undefined;
-
-            for (const part of parts.slice(2)) {
-                const [key, value] = part.split(":");
-
-                if (key === "step") {
-                    currentTrackStep = value;
-                }
-
-                if (key === "note") {
-                    currentTrackNote = value;
-                }
+            if (line.startsWith("grid:")) {
+                grid = line.split(":")[1].trim();
+                continue;
             }
 
-            continue;
-        }
+            if (line.startsWith("time:")) {
+                time = line.split(":")[1].trim();
+                continue;
+            }
 
-        if (line.startsWith("play:")) {
-            arrangement = line
-                .slice("play:".length)
-                .trim()
-                .split(/\s+/);
+            if (line.startsWith("section:")) {
+                currentSection = line.split(":")[1].trim();
 
-            continue;
-        }
+                if (!sections.has(currentSection)) {
+                    sections.set(currentSection, []);
+                    sectionOrder.push(currentSection);
+                }
 
-        if (line.startsWith("|")) {
-            const { line: barLine, repeatCount } = stripRepeat(line);
+                step = 0;
+                previousChordVoicing = undefined;
+                continue;
+            }
 
-            const cells = barLine
-                .split("|")
-                .map(c => c.trim())
-                .filter(Boolean);
+            if (line.startsWith("track:")) {
+                const parts = line.split(/\s+/);
 
-            const stepSize = resolutionToGridSteps(currentTrackStep, grid);
+                currentTrack = parts[1];
+                currentTrackStep = grid;
+                currentTrackNote = undefined;
 
-            for (let repeat = 0; repeat < repeatCount; repeat++) {
-                for (const cell of cells) {
-                    const eventTrack = currentTrack;
+                trackMeta[currentTrack] ??= {};
 
-                    const parsed = parseCell(
-                        cell,
-                        eventTrack,
-                        step,
-                        stepSize,
-                        previousChordVoicing,
-                        currentTrackNote
-                    );
+                step = 0;
+                previousChordVoicing = undefined;
 
-                    if (currentSection) {
-                        sections.get(currentSection)!.push(...parsed.events);
-                    } else {
-                        events.push(...parsed.events);
+                for (const part of parts.slice(2)) {
+                    const [key, value] = part.split(":");
+
+                    if (key === "step") {
+                        currentTrackStep = value;
                     }
 
-                    if (parsed.chordVoicing) {
-                        previousChordVoicing = parsed.chordVoicing;
+                    if (key === "note") {
+                        currentTrackNote = value;
                     }
 
-                    step += stepSize;
+                    if (key === "color") {
+                        trackMeta[currentTrack] ??= {};
+                        trackMeta[currentTrack].color = value;
+                    }
                 }
+
+                continue;
             }
 
-            continue;
-        }
+            if (line.startsWith("play:")) {
+                arrangement = line
+                    .slice("play:".length)
+                    .trim()
+                    .split(/\s+/);
+
+                continue;
+            }
+
+            if (line.startsWith("|")) {
+                const { line: barLine, repeatCount } = stripRepeat(line);
+
+                const cells = barLine
+                    .split("|")
+                    .map(c => c.trim())
+                    .filter(Boolean);
+
+                const stepSize = resolutionToGridSteps(currentTrackStep, grid);
+
+                for (let repeat = 0; repeat < repeatCount; repeat++) {
+                    for (const cell of cells) {
+                        const eventTrack = currentTrack;
+
+                        const parsed = parseCell(
+                            cell,
+                            eventTrack,
+                            step,
+                            stepSize,
+                            previousChordVoicing,
+                            currentTrackNote
+                        );
+
+                        if (currentSection) {
+                            sections.get(currentSection)!.push(...parsed.events);
+                        } else {
+                            events.push(...parsed.events);
+                        }
+
+                        if (parsed.chordVoicing) {
+                            previousChordVoicing = parsed.chordVoicing;
+                        }
+
+                        step += stepSize;
+                    }
+                }
+
+                continue;
+            }
         } catch (err: any) {
             throw new Error(`Parse error at line ${lineNumber}: ${err?.message ?? String(err)}`);
         }
@@ -138,7 +146,8 @@ export const parseTmidi = (source: string): Song => {
             tempo,
             grid,
             time,
-            events: arrangeSections(sections, arrangement)
+            events: arrangeSections(sections, arrangement),
+            tracks: trackMeta
         };
     }
 
@@ -147,7 +156,8 @@ export const parseTmidi = (source: string): Song => {
             tempo,
             grid,
             time,
-            events: arrangeSections(sections, sectionOrder)
+            events: arrangeSections(sections, sectionOrder),
+            tracks: trackMeta
         };
     }
 

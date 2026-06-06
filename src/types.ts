@@ -11,9 +11,14 @@ export type TrackState = {
   step: string;
 };
 
+export type TrackMeta = {
+  color?: string;
+};
+
 export type Song = {
   tempo: number;
   grid: string;
   time: string;
   events: NoteEvent[];
+  tracks?: Record<string, TrackMeta>;
 };
