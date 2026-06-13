@@ -1,0 +1,39 @@
+section: strings_b
+
+track: cello step:1/2
+
+| D2 | A1 |
+| C#2 | G1 |
+| F#1 | C#2 |
+| G1 | D2 |
+
+| D2 | A1 |
+| C#2 | E2 |
+| E2 | B1 |
+| G1 | D2 |
+
+track: viola step:1/2
+
+| A3 | C#4 |
+| G3 | A3 |
+| A3 | E4 |
+| B3 | D4 |
+
+| A3 | C#4 |
+| G3 | B3 |
+| G3 | B3 |
+| A3 | D4 |
+
+track: violin step:1/4
+
+| E5 | F#5 | E5 | D5 |
+| E5 | A5 | E5 | C#5 |
+| C#5 | E5 | F#5 | E5 |
+| D5 | F#5 | A5 | F#5 |
+
+| E5 | F#5 | A5 | F#5 |
+| E5 | B5 | A5 | F#5 |
+| B4 | D5 | F#5 | A5 |
+| E5 | D5 | A4 | - |
+
+play: strings_b

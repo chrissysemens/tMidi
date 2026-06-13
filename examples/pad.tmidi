@@ -1,0 +1,17 @@
+
+tempo: 90
+grid: 1/16
+time: 4/4
+
+section: A
+
+track: pad step:1/1
+| Dm11 | Bbmaj | Fmaj7 | Em7 |
+
+track: melody step:1/16
+| - | - | E5 | - | G5 | - | A5 | - |
+| - | - | D5 | - | B4 | - | G4 | - |
+| - | - | C5 | - | A4 | - | F4 | - |
+| - | - | B4 | - | G4 | - | E4 | - |
+
+play: groove groove groove groove

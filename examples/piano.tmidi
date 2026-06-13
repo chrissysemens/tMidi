@@ -1,0 +1,56 @@
+tempo: 76
+grid: 1/16
+time: 4/4
+
+section: main_theme
+
+track: piano_chords step:1/1
+| [D3 A3 C#4 E4] |
+| [A2 E3 G3 C#4] |
+| [F#2 C#3 E3 A3] |
+| [G2 D3 F#3 B3] |
+
+| [D3 A3 C#4 E4] |
+| [A2 E3 G3 C#4] |
+| [E2 B2 D3 G3] |
+| [G2 D3 F#3 A3] |
+
+track: piano_motif step:1/8
+
+| A4 | - | C#5 | - |
+| E5 | - | C#5 | - |
+
+| G4 | - | A4 | - |
+| C#5 | - | A4 | - |
+
+| E4 | - | F#4 | - |
+| A4 | - | F#4 | - |
+
+| D4 | - | F#4 | - |
+| A4 | - | F#4 | - |
+
+| A4 | - | C#5 | - |
+| E5 | - | C#5 | - |
+
+| G4 | - | A4 | - |
+| C#5 | - | E5 | - |
+
+| B4 | - | A4 | - |
+| G4 | - | F#4 | - |
+
+| E4 | - | D4 | - |
+| A4 | - | - | - |
+
+track: low_piano step:1/4
+
+| D2 | A2 | D3 | A2 |
+| A1 | E2 | A2 | E2 |
+| F#1 | C#2 | F#2 | C#2 |
+| G1 | D2 | G2 | D2 |
+
+| D2 | A2 | D3 | A2 |
+| A1 | E2 | A2 | E2 |
+| E1 | B1 | E2 | B1 |
+| G1 | D2 | A2 | D2 |
+
+play: main_theme
